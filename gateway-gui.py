@@ -327,7 +327,7 @@ class GatewayApp:
     def change_model(self):
         """Change model"""
         selected = self.model_var.get()
-        model_id = selected.split(" - ")[0]
+        model_id = next((mid for mid, desc in self.models if desc == selected), selected)
         self.log(f"🔄 Modelis nustatytas: {model_id}")
 
         # Save to config

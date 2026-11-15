@@ -9,4 +9,4 @@ echo Šį langą laikyk atidarytą!
 echo Norėdamas sustabdyti: Ctrl+C
 echo.
 
-litellm --config_dir . --port 4000
+litellm --config_dir . --host 127.0.0.1 --port 4000

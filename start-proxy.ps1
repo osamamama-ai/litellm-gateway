@@ -15,4 +15,4 @@ if (Test-Path $envFile) {
 # Start proxy
 Write-Host "Proxy paleidžiamas su OPENROUTER_API_KEY..." -ForegroundColor Green
 cd $PSScriptRoot
-& litellm --config config.yaml --port 4000
+& litellm --config config.yaml --host 127.0.0.1 --port 4000

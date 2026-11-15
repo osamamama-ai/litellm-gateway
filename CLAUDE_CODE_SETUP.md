@@ -16,7 +16,7 @@ cd C:\Users\osama\litellm-gateway
 #### A. Automatinis būdas (rekomenduojama):
 ```powershell
 # Nustatyti aplinkos kintamuosius per PowerShell
-$env:ANTHROPIC_BASE_URL = "http://127.0.0.1:4000/v1"
+$env:ANTHROPIC_BASE_URL = "http://127.0.0.1:4000"
 $env:ANTHROPIC_API_KEY = "sk-gateway"
 
 # Palaidžiant Claude Code
@@ -27,7 +27,7 @@ claude code .
 Redaguokite ~/.claude/settings.json:
 ```json
 {
-  "anthropic_base_url": "http://127.0.0.1:4000/v1",
+  "anthropic_base_url": "http://127.0.0.1:4000",
   "anthropic_api_key": "dummy-for-gateway"
 }
 ```
@@ -39,9 +39,10 @@ Iš Claude Code terminalo:
 # Patikrinti gateway statusą
 curl http://127.0.0.1:4000/health
 
-# Bandyti API žaliasiomis
+# Bandyti API su master raktu (jį rask .env -> LITELLM_MASTER_KEY)
 curl -X POST http://127.0.0.1:4000/v1/chat/completions \
   -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $LITELLM_MASTER_KEY" \
   -d '{
     "model": "deepseek-pro",
     "messages": [{"role": "user", "content": "Sveikas pasauli!"}]
@@ -63,5 +64,5 @@ Jei gateway nepradeda:
 
 Jei Claude Code nesikonektuoja:
 1. Patikrinti: `netstat -ano | findstr :4000`
-2. Nustatyti: `$env:ANTHROPIC_BASE_URL = "http://127.0.0.1:4000/v1"`
+2. Nustatyti: `$env:ANTHROPIC_BASE_URL = "http://127.0.0.1:4000"`
 3. Atidaryti naują Claude Code procesą

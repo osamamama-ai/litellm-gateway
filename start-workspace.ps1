@@ -4,7 +4,7 @@
 Write-Host "🚀 Pradedamas LiteLLM Gateway workspace..." -ForegroundColor Cyan
 
 # Nustatyti aplinkos kintamuosius
-$env:ANTHROPIC_BASE_URL = "http://127.0.0.1:4000/v1"
+$env:ANTHROPIC_BASE_URL = "http://127.0.0.1:4000"
 
 # Perkelti į projektą
 Set-Location "C:\Users\osama\litellm-gateway"
