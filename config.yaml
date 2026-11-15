@@ -38,3 +38,4 @@ router_settings:
 general_settings:
   master_key: os.environ/LITELLM_MASTER_KEY
   dangerously_permit_weak_or_unset_master_key: true
+  log_file_dir: "./logs"
