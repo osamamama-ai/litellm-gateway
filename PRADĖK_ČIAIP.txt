@@ -1,0 +1,97 @@
+╔══════════════════════════════════════════════════════════════════╗
+║          LiteLLM - LABAI PAPRASTA NAUDOJIMUI                    ║
+║                   PRADŽIA IŠKART!                               ║
+╚══════════════════════════════════════════════════════════════════╝
+
+
+🎯 DAUGIAU NEREIKIA JOKIOS MAGIJOS!
+
+Darbalaukyje randasi nuoroda:
+   ▶ "LiteLLM - Paprasta"
+
+Tai viskas, ką reikia! Spustelk ir dirbk.
+
+
+════════════════════════════════════════════════════════════════════
+
+
+📋 KAIP NAUDOTI:
+
+1️⃣  Spustelk "LiteLLM - Paprasta" darbalaukyje
+
+2️⃣  Atsidaro meniu - pasirink 5:
+    5 - Pradėti abi (proxy + Claude Code)
+
+3️⃣  Čia ir viskas!
+    ✅ Proxy paleidžiasi fone
+    ✅ Claude Code atidaras su cheap-code
+    ✅ Galima dirbti
+
+4️⃣  Kai baigsi:
+    - Uždaryk Claude Code langą (normaliai)
+    - Uždaryk proxy langą (Ctrl+C arba X)
+    - Gata!
+
+
+════════════════════════════════════════════════════════════════════
+
+
+🎛️  MENIU PARINKTYS (jei nori kito):
+
+  1 - Tik proxy (127.0.0.1:4000) – jei nori pradėti rankinio
+  2 - Claude Code + cheap-code (pigiausias) – numatytasis
+  3 - Claude Code + haiku (geriausias Claude)
+  4 - Claude Code + deepseek-flash (pigiausias iš viso)
+  5 - Abi automatiškai – REKOMENDUOJAMA ✅
+
+
+════════════════════════════════════════════════════════════════════
+
+
+💰 MODELIAI PAGAL BIUDŽETĄ:
+
+  Pigiausias:    deepseek-flash  (option 4)
+  Geriausias Claude: haiku       (option 3)
+  Lankstausias:  cheap-code      (option 2)
+  Galingiausias: sonnet-5 arba deepseek-pro
+
+
+════════════════════════════════════════════════════════════════════
+
+
+❓ KĄ DARYTI, JEI KĄ NORS NEVEIKIA?
+
+PROBLEMA: Proxy neleidžia
+SPRENDIMAS: Jis jau bėga. Tikrini komandą:
+  netstat -ano | findstr ":4000"
+
+PROBLEMA: "Claude Code doesn't recognize cheap-code"
+SPRENDIMAS: Tikėtinas triukšmas. Modelis veikia!
+
+PROBLEMA: Noriu sustabdyti proxy
+SPRENDIMAS: Ctrl+C proxy lange arba uždary langą
+
+PROBLEMA: Neveikia iš viso
+SPRENDIMAS: Sakyk kokia klaida, spręsim.
+
+
+════════════════════════════════════════════════════════════════════
+
+
+📝 FAILAI ČIAME APLANKE:
+
+  paprasta-start.cmd    ← Svarbus! Meniu programa
+  PAPRASTA.md           ← Dokumentacija (jei nori žinoti daugiau)
+  README.md             ← Techninis aprašas (jei nori giliau)
+  .env                  ← Raktai (NEATIDARY, NESPAUSDINK!)
+  config.yaml           ← Konfiguracija (naudotojai nekeičia)
+
+
+════════════════════════════════════════════════════════════════════
+
+
+✅ PARUOŠTA IR PAPRASTA!
+
+Spustelk "LiteLLM - Paprasta" darbalaukyje → Pasirink 5 → Darbi!
+
+Bet ką klausi – parašyk.

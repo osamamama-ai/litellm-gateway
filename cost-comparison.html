@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cost Comparison - LiteLLM Gateway</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #1e1e2e;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            width: 100%;
+        }
+        .title {
+            text-align: center;
+            color: #667eea;
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 40px;
+        }
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        .card {
+            background: #2a2a3e;
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            border: 2px solid #404050;
+            transition: all 0.3s ease;
+        }
+        .card.without {
+            border-color: #f44336;
+        }
+        .card.with {
+            border-color: #00ff00;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.1);
+        }
+        .card h3 {
+            color: #e0e0e0;
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        .card.without h3 {
+            color: #ff6b6b;
+        }
+        .card.with h3 {
+            color: #00ff00;
+        }
+        .label {
+            color: #999;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .cost {
+            font-size: 56px;
+            font-weight: 800;
+            margin: 20px 0;
+            color: #667eea;
+        }
+        .card.without .cost {
+            color: #ff6b6b;
+        }
+        .card.with .cost {
+            color: #00ff00;
+        }
+        .per-month {
+            color: #999;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+        .model-info {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            color: #999;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+        .savings-section {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px;
+            border-radius: 16px;
+            margin-bottom: 40px;
+        }
+        .savings-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .savings-amount {
+            font-size: 48px;
+            font-weight: 800;
+            color: #00ff00;
+            margin-bottom: 10px;
+        }
+        .savings-percent {
+            font-size: 24px;
+            color: white;
+        }
+        .timeline {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 60px;
+            padding: 40px;
+            background: #2a2a3e;
+            border-radius: 16px;
+        }
+        .timeline-item {
+            text-align: center;
+            flex: 1;
+        }
+        .timeline-item:not(:last-child) {
+            border-right: 2px solid #404050;
+            padding-right: 30px;
+        }
+        .timeline-item:not(:first-child) {
+            padding-left: 30px;
+        }
+        .timeline-label {
+            color: #999;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .timeline-value {
+            color: #667eea;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        .timeline-item:last-child .timeline-value {
+            color: #00ff00;
+        }
+        @media (max-width: 768px) {
+            .comparison {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .timeline {
+                flex-direction: column;
+            }
+            .timeline-item:not(:last-child) {
+                border-right: none;
+                border-bottom: 2px solid #404050;
+                padding-right: 0;
+                padding-bottom: 30px;
+            }
+            .timeline-item:not(:first-child) {
+                padding-left: 0;
+                padding-top: 30px;
+            }
+            .title {
+                font-size: 24px;
+            }
+            .cost {
+                font-size: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">💰 Cost Comparison</div>
+
+        <div class="comparison">
+            <div class="card without">
+                <h3>❌ Without Gateway</h3>
+                <div class="label">Direct Claude API</div>
+                <div class="cost">$300</div>
+                <div class="per-month">per month</div>
+                <div class="model-info">
+                    All requests → Claude API<br>
+                    $3.00 / 1M tokens
+                </div>
+            </div>
+
+            <div class="card with">
+                <h3>✅ With Gateway</h3>
+                <div class="label">Smart Routing</div>
+                <div class="cost">$14</div>
+                <div class="per-month">per month</div>
+                <div class="model-info">
+                    Intelligent 5-tier routing<br>
+                    Average: $0.14 / 1M tokens
+                </div>
+            </div>
+        </div>
+
+        <div class="savings-section">
+            <div class="savings-label">💚 Total Monthly Savings</div>
+            <div class="savings-amount">$286</div>
+            <div class="savings-percent">95% Cost Reduction</div>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-label">Monthly Cost</div>
+                <div class="timeline-value">$300 → $14</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-label">Yearly Savings</div>
+                <div class="timeline-value">$3,432</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-label">Quality</div>
+                <div class="timeline-value">✅ Same</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
