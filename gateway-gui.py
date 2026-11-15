@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-LiteLLM Gateway Control - Simple Tkinter GUI
+LiteLLM Gateway Control - Professional Tkinter GUI with Modern Design
 """
 
 import tkinter as tk
@@ -16,135 +16,242 @@ import socket
 class GatewayApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("🚀 LiteLLM Gateway Control")
-        self.root.geometry("700x600")
-        self.root.configure(bg="#f0f0f0")
+        self.root.title("🚀 LiteLLM Gateway Manager")
+        self.root.geometry("800x700")
+
+        # Modern color scheme
+        self.bg_primary = "#1e1e2e"  # Dark background
+        self.bg_secondary = "#2a2a3e"  # Secondary background
+        self.accent_color = "#00d4ff"  # Cyan accent
+        self.success_color = "#00ff00"  # Green
+        self.danger_color = "#ff4444"  # Red
+        self.text_color = "#e0e0e0"  # Light text
+        self.border_color = "#404050"  # Border
+
+        self.root.configure(bg=self.bg_primary)
+
+        # Modern style
+        style = ttk.Style()
+        style.theme_use('clam')
 
         self.gateway_dir = Path(__file__).parent
         self.is_running = False
+        self.animation_state = 0
 
         self.setup_ui()
         self.check_status()
         self.auto_update()
 
     def setup_ui(self):
-        """Setup UI"""
-        # Header
-        header = tk.Label(
-            self.root,
+        """Setup modern UI"""
+        # Main container
+        main_frame = tk.Frame(self.root, bg=self.bg_primary)
+        main_frame.pack(fill="both", expand=True, padx=0, pady=0)
+
+        # Header section with gradient effect
+        header_frame = tk.Frame(main_frame, bg=self.bg_secondary, height=80)
+        header_frame.pack(fill="x", padx=0, pady=0)
+        header_frame.pack_propagate(False)
+
+        tk.Label(
+            header_frame,
             text="🚀 LiteLLM Gateway Manager",
-            font=("Arial", 16, "bold"),
-            bg="#f0f0f0"
-        )
-        header.pack(pady=10)
+            font=("Helvetica", 20, "bold"),
+            bg=self.bg_secondary,
+            fg=self.accent_color
+        ).pack(pady=15)
 
-        # Status frame
-        status_frame = tk.Frame(self.root, bg="#f0f0f0")
-        status_frame.pack(pady=10, padx=20, fill="x")
+        tk.Label(
+            header_frame,
+            text="AI Gateway with Cost Optimization",
+            font=("Helvetica", 10),
+            bg=self.bg_secondary,
+            fg=self.text_color
+        ).pack()
 
-        tk.Label(status_frame, text="Proxy Statusas:", font=("Arial", 10), bg="#f0f0f0").pack(side="left")
+        # Status card
+        status_card = tk.Frame(main_frame, bg=self.bg_secondary, relief="flat")
+        status_card.pack(padx=20, pady=15, fill="x")
+
+        # Status indicator
+        status_inner = tk.Frame(status_card, bg=self.bg_secondary)
+        status_inner.pack(padx=15, pady=12, fill="x")
+
+        tk.Label(
+            status_inner,
+            text="Proxy Status:",
+            font=("Helvetica", 11, "bold"),
+            bg=self.bg_secondary,
+            fg=self.text_color
+        ).pack(side="left")
 
         self.status_label = tk.Label(
-            status_frame,
-            text="⛔ Checking...",
-            font=("Arial", 11, "bold"),
-            bg="#f0f0f0",
-            fg="orange"
+            status_inner,
+            text="⏳ Checking...",
+            font=("Helvetica", 12, "bold"),
+            bg=self.bg_secondary,
+            fg="#ffaa00"
         )
-        self.status_label.pack(side="left", padx=10)
+        self.status_label.pack(side="left", padx=15)
 
-        # Control buttons
-        button_frame = tk.Frame(self.root, bg="#f0f0f0")
-        button_frame.pack(pady=10, padx=20, fill="x")
+        # Control buttons section
+        control_frame = tk.Frame(main_frame, bg=self.bg_primary)
+        control_frame.pack(padx=20, pady=10, fill="x")
+
+        tk.Label(
+            control_frame,
+            text="Quick Actions",
+            font=("Helvetica", 11, "bold"),
+            bg=self.bg_primary,
+            fg=self.accent_color
+        ).pack(anchor="w", pady=(0, 8))
+
+        button_frame = tk.Frame(control_frame, bg=self.bg_primary)
+        button_frame.pack(fill="x")
 
         self.start_btn = tk.Button(
             button_frame,
-            text="▶ Pradėti Proxy",
+            text="▶ Start Gateway",
             command=self.start_proxy,
-            bg="#4CAF50",
-            fg="white",
-            font=("Arial", 10, "bold"),
-            padx=15,
-            pady=8
+            bg=self.success_color,
+            fg="#000000",
+            font=("Helvetica", 10, "bold"),
+            padx=20,
+            pady=10,
+            relief="flat",
+            cursor="hand2",
+            activebackground="#00dd00",
+            activeforeground="#000000"
         )
         self.start_btn.pack(side="left", padx=5)
+        self.start_btn.bind("<Enter>", lambda e: self.on_button_hover(self.start_btn))
+        self.start_btn.bind("<Leave>", lambda e: self.on_button_leave(self.start_btn))
 
         self.stop_btn = tk.Button(
             button_frame,
-            text="⏹ Sustabdyti Proxy",
+            text="⏹ Stop Gateway",
             command=self.stop_proxy,
-            bg="#f44336",
+            bg=self.danger_color,
             fg="white",
-            font=("Arial", 10, "bold"),
-            padx=15,
-            pady=8
+            font=("Helvetica", 10, "bold"),
+            padx=20,
+            pady=10,
+            relief="flat",
+            cursor="hand2",
+            activebackground="#ff5555",
+            activeforeground="white"
         )
         self.stop_btn.pack(side="left", padx=5)
+        self.stop_btn.bind("<Enter>", lambda e: self.on_button_hover(self.stop_btn))
+        self.stop_btn.bind("<Leave>", lambda e: self.on_button_leave(self.stop_btn))
 
-        # Model selector
-        model_frame = tk.Frame(self.root, bg="#f0f0f0")
-        model_frame.pack(pady=10, padx=20, fill="x")
+        # Model selector section
+        model_label_frame = tk.Frame(main_frame, bg=self.bg_primary)
+        model_label_frame.pack(padx=20, pady=(15, 5), fill="x")
 
-        tk.Label(model_frame, text="Modelis:", font=("Arial", 10), bg="#f0f0f0").pack(side="left")
+        tk.Label(
+            model_label_frame,
+            text="Model Selection",
+            font=("Helvetica", 11, "bold"),
+            bg=self.bg_primary,
+            fg=self.accent_color
+        ).pack(anchor="w")
+
+        model_frame = tk.Frame(main_frame, bg=self.bg_secondary, relief="flat")
+        model_frame.pack(padx=20, pady=(0, 10), fill="x")
+
+        model_inner = tk.Frame(model_frame, bg=self.bg_secondary)
+        model_inner.pack(padx=15, pady=12, fill="x")
+
+        tk.Label(
+            model_inner,
+            text="Select Model:",
+            font=("Helvetica", 10),
+            bg=self.bg_secondary,
+            fg=self.text_color
+        ).pack(side="left", padx=(0, 10))
 
         self.models = [
-            ("cheap-code", "Kimi K2.7 Code (pigiausias)"),
-            ("deepseek-flash", "DeepSeek Flash (labai pigus)"),
-            ("claude-haiku-5-5", "Claude Haiku (geriausias Claude)"),
-            ("claude-sonnet-5", "Claude Sonnet (galingas)"),
-            ("deepseek-pro", "DeepSeek Pro (labai galingas)"),
+            ("deepseek-flash", "🚀 DeepSeek Flash (Cheapest)"),
+            ("cheap-code", "💻 Code Model (Fast)"),
+            ("claude-haiku-5-5", "🎯 Claude Haiku (Quality)"),
+            ("claude-sonnet-5", "⚡ Claude Sonnet (Powerful)"),
+            ("deepseek-pro", "💎 DeepSeek Pro (Best)"),
         ]
 
-        model_names = [f"{name} - {desc}" for name, desc in self.models]
-
+        model_names = [f"{desc}" for _, desc in self.models]
         self.model_var = tk.StringVar(value=model_names[0])
+
         self.model_combo = ttk.Combobox(
-            model_frame,
+            model_inner,
             textvariable=self.model_var,
             values=model_names,
             state="readonly",
-            width=50
+            width=45
         )
-        self.model_combo.pack(side="left", padx=10, fill="x", expand=True)
+        self.model_combo.pack(side="left", fill="x", expand=True)
         self.model_combo.bind("<<ComboboxSelected>>", lambda e: self.change_model())
 
         # Launch button
         launch_btn = tk.Button(
-            self.root,
-            text="🎯 Paleidžiami abi (Proxy + Claude Code)",
+            main_frame,
+            text="💻 Launch Gateway + Claude Code",
             command=self.launch_both,
-            bg="#2196F3",
-            fg="white",
-            font=("Arial", 11, "bold"),
+            bg=self.accent_color,
+            fg="#000000",
+            font=("Helvetica", 11, "bold"),
             padx=20,
-            pady=10
+            pady=12,
+            relief="flat",
+            cursor="hand2",
+            activebackground="#00e5ff",
+            activeforeground="#000000"
         )
-        launch_btn.pack(pady=10, padx=20, fill="x")
+        launch_btn.pack(padx=20, pady=15, fill="x")
+        launch_btn.bind("<Enter>", lambda e: self.on_button_hover(launch_btn))
+        launch_btn.bind("<Leave>", lambda e: self.on_button_leave(launch_btn))
 
-        # Logs
-        tk.Label(self.root, text="📋 Žurnalas:", font=("Arial", 10), bg="#f0f0f0").pack(padx=20, anchor="w")
+        # Activity log section
+        log_label = tk.Label(
+            main_frame,
+            text="Activity Log",
+            font=("Helvetica", 11, "bold"),
+            bg=self.bg_primary,
+            fg=self.accent_color
+        )
+        log_label.pack(padx=20, pady=(15, 5), anchor="w")
 
         self.logs = scrolledtext.ScrolledText(
-            self.root,
-            height=12,
+            main_frame,
+            height=10,
             width=80,
-            bg="#1e1e1e",
+            bg="#0a0a0f",
             fg="#00ff00",
-            font=("Courier", 9),
-            insertbackground="white"
+            font=("Courier New", 9),
+            insertbackground="#00ff00",
+            relief="flat",
+            bd=1
         )
-        self.logs.pack(padx=20, pady=10, fill="both", expand=True)
+        self.logs.pack(padx=20, pady=(0, 15), fill="both", expand=True)
         self.logs.config(state="disabled")
 
         # Footer
         footer = tk.Label(
-            self.root,
-            text="💚 LiteLLM Gateway Control v1.0",
-            font=("Arial", 9),
-            bg="#f0f0f0",
-            fg="#666"
+            main_frame,
+            text="✨ LiteLLM Gateway v1.0 | Cost-Optimized AI Routing",
+            font=("Helvetica", 9),
+            bg=self.bg_primary,
+            fg=self.border_color
         )
-        footer.pack(pady=5)
+        footer.pack(pady=10)
+
+    def on_button_hover(self, button):
+        """Button hover effect"""
+        button.config(relief="raised")
+
+    def on_button_leave(self, button):
+        """Button leave effect"""
+        button.config(relief="flat")
 
     def log(self, message):
         """Add log message"""
