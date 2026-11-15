@@ -1,0 +1,40 @@
+model_list:
+  # Claude Sonnet 5 per OpenRouter (atskiro Anthropic rakto nereikia)
+  - model_name: claude-sonnet-5
+    litellm_params:
+      model: openrouter/anthropic/claude-sonnet-5
+      api_key: os.environ/OPENROUTER_API_KEY
+  # Claude Haiku 5.5 per OpenRouter - pigus tikras Claude
+  - model_name: claude-haiku-5-5
+    litellm_params:
+      model: openrouter/anthropic/claude-haiku-5.5
+      api_key: os.environ/OPENROUTER_API_KEY
+  # Kimi K2.7 Code per OpenRouter - atsarginis
+  - model_name: cheap-code
+    litellm_params:
+      model: openrouter/moonshotai/kimi-k2.7-code
+      api_key: os.environ/OPENROUTER_API_KEY
+      max_tokens: 8192
+
+  # DeepSeek V4.1 Flash per OpenRouter - pigiausias, paprastiems darbams
+  - model_name: deepseek-flash
+    litellm_params:
+      model: openrouter/deepseek/deepseek-v4.1-flash
+      api_key: os.environ/OPENROUTER_API_KEY
+  # DeepSeek V4 Pro per OpenRouter - pigesne alternatyva Sonnet
+  - model_name: deepseek-pro
+    litellm_params:
+      model: openrouter/deepseek/deepseek-v4-pro
+      api_key: os.environ/OPENROUTER_API_KEY
+
+router_settings:
+  num_retries: 2
+  fallbacks:
+    - claude-sonnet-5: ["claude-haiku-5-5", "cheap-code"]
+    - claude-haiku-5-5: ["cheap-code"]
+    - deepseek-pro: ["deepseek-flash"]
+    - deepseek-flash: ["claude-haiku-5-5"]
+
+general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY
+  dangerously_permit_weak_or_unset_master_key: true
