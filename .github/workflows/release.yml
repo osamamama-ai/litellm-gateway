@@ -1,0 +1,58 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Create Release Notes
+      run: |
+        VERSION=${GITHUB_REF#refs/tags/}
+        echo "Creating release for $VERSION"
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        body: |
+          ## LiteLLM Gateway Release ${{ github.ref }}
+
+          See [CHANGELOG.md](CHANGELOG.md) for details.
+
+          ### Installation
+          ```bash
+          git clone https://github.com/osama/litellm-gateway.git
+          cd litellm-gateway
+          git checkout ${{ github.ref_name }}
+          pip install -r requirements.txt
+          ```
+
+          ### Quick Start
+          ```bash
+          python gateway-gui.py
+          ```
+
+          ### Documentation
+          - [Setup Guide](docs/SETUP.md)
+          - [Models Guide](docs/MODELS.md)
+          - [Usage Guide](docs/USAGE.md)
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish-docs:
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Deploy documentation
+      run: |
+        echo "Documentation deployed for release"
+        # Add your documentation build/deploy steps here
