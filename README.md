@@ -5,18 +5,17 @@
 [![GitHub License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Python 3.7+](https://img.shields.io/badge/python-3.7%2B-blue.svg)](https://www.python.org/downloads/)
 [![GitHub Stars](https://img.shields.io/github/stars/osamamama-ai/litellm-gateway?style=social)](https://github.com/osamamama-ai/litellm-gateway)
-[![GitHub Issues](https://img.shields.io/github/issues/osamamama-ai/litellm-gateway)](https://github.com/osamamama-ai/litellm-gateway/issues)
 
 ---
 
 ## 🎯 What is LiteLLM Gateway?
 
-A **lightweight, cost-optimized AI gateway** that routes your requests through multiple AI providers (OpenRouter, Anthropic, Azure) with:
+A **lightweight, cost-optimized AI gateway** that routes your requests through multiple AI providers with:
 
 - 💰 **91% Cost Savings** - Use cheaper models (DeepSeek, Kimi) instead of Claude
 - 🖥️ **Desktop GUI** - Tkinter control panel for easy management
-- 🔀 **Smart Routing** - Automatic failover chain (fast → cheap → powerful)
-- 📊 **Real-time Billing** - Track your AI spending per request
+- 🔀 **Smart Routing** - Automatic failover chain
+- 📊 **Real-time Billing** - Track your AI spending
 - 🔌 **Claude Code Integration** - Use with Claude Code for development
 - 🌐 **Local & Cloud** - Run locally or deploy to production
 
@@ -29,44 +28,27 @@ Organizations waste **90% of AI API spend** on suboptimal model selection:
 - ❌ Every request goes to expensive Claude/GPT-4
 - ❌ No visibility into costs
 - ❌ No unified interface across providers
-- ❌ Overpaying for simple tasks
-
----
 
 ## ✅ The Solution
 
-**LiteLLM Gateway** routes intelligently:
+**LiteLLM Gateway** routes intelligently through a 5-tier model system:
 
-```
-User Request
-    ↓
-┌─────────────────────────┐
-│   LiteLLM Gateway       │
-│  (Smart Router)         │
-└─────────────────────────┘
-    ↓
-┌───────────────────────────────────┐
-│  Model Selection (5-tier system)  │
-├───────────────────────────────────┤
-│ 1️⃣  deepseek-flash   ($0.014/1M)  │  ← Default (super cheap)
-│ 2️⃣  cheap-code       ($0.050/1M)  │  ← Coding tasks
-│ 3️⃣  claude-haiku     ($0.080/1M)  │  ← Real Claude (fast)
-│ 4️⃣  claude-sonnet    ($3.000/1M)  │  ← Powerful Claude
-│ 5️⃣  deepseek-pro     ($0.270/1M)  │  ← Fallback (quality)
-└───────────────────────────────────┘
-    ↓
-OpenRouter API (unified proxy)
-```
+| Tier | Model | Cost | Use Case |
+|------|-------|------|----------|
+| 1 | deepseek-flash | $0.014/1M | Simple tasks |
+| 2 | cheap-code | $0.050/1M | Code generation |
+| 3 | claude-haiku | $0.080/1M | Real Claude (fast) |
+| 4 | claude-sonnet | $3.000/1M | Complex reasoning |
+| 5 | deepseek-pro | $0.270/1M | Quality fallback |
 
 ---
 
 ## 💰 Cost Comparison
 
-| Task | Claude | DeepSeek | Savings |
-|------|--------|----------|---------|
-| **Simple coding** | $3.00/1M | $0.014/1M | **99.5%** ↓ |
-| **Code review** | $3.00/1M | $0.050/1M | **98.3%** ↓ |
-| **Monthly coding** | ~$300 | ~$27 | **~$273** ↓ |
+| | Direct Claude | With Gateway | Savings |
+|---|---|---|---|
+| **Cost/1M tokens** | $3.00 | $0.14 | **95%** ↓ |
+| **Monthly coding** | ~$300 | ~$14 | **~$286** ↓ |
 
 ---
 
@@ -74,11 +56,8 @@ OpenRouter API (unified proxy)
 
 ### 1. Prerequisites
 ```bash
-# Python 3.7+
-python --version
-
-# OpenRouter API key
-# Get it: https://openrouter.ai/keys
+python --version  # 3.7+
+# OpenRouter API key: https://openrouter.ai/keys
 ```
 
 ### 2. Install
@@ -90,7 +69,7 @@ pip install -r requirements.txt
 
 ### 3. Configure
 ```bash
-# Edit .env
+# .env file
 OPENROUTER_API_KEY=sk-or-v1-your-key-here
 ANTHROPIC_BASE_URL=http://127.0.0.1:4000/v1
 ```
@@ -106,44 +85,49 @@ python gateway-gui.py
 
 ---
 
-## 🎮 Desktop GUI Features
+## 🎮 Visual Tour
 
-### Control Panel
-- ✅ **Proxy Status** - Real-time health check
-- ✅ **Model Switcher** - Change models on-the-fly
-- ✅ **Start/Stop Buttons** - Easy controls
-- ✅ **Activity Logs** - See what's happening
-- ✅ **Cost Counter** - Track spending
-- ✅ **Claude Code Integration** - Launch both with one click
+### Main Control Panel
 
-### Example Screenshot
+![LiteLLM Gateway GUI](docs/images/gateway-gui-main.png)
+
+**Live Gateway Manager Interface** — Shows proxy status, model selector, real-time cost tracking, and activity logs.
+
+### ASCII Mockup Reference
+
 ```
-┌─────────────────────────────────────┐
-│  🚀 LiteLLM Gateway Manager        │
-├─────────────────────────────────────┤
-│ Proxy Status: ✅ Running (4000)     │
-│                                     │
-│ ┌─────────────┬──────────────┐     │
-│ │ ▶ Start     │ ⏹ Stop       │     │
-│ └─────────────┴──────────────┘     │
-│                                     │
-│ Model: [deepseek-pro ▼]             │
-│ Cost This Session: $0.08            │
-│                                     │
-│ [💻 Launch Claude Code + Gateway]  │
-│                                     │
-│ Logs:                               │
-│ [12:21:04] ✅ Proxy started         │
-│ [12:21:05] ✅ deepseek-pro ready   │
-│ [12:21:33] 📨 Request processed    │
-└─────────────────────────────────────┘
+╔════════════════════════════════════════════════╗
+║  🚀 LiteLLM Gateway Manager                    ║
+╠════════════════════════════════════════════════╣
+║                                                ║
+║  Proxy Status: ✅ Veikia (127.0.0.1:4000)     ║
+║                                                ║
+║  ┌─────────────────┬──────────────────┐       ║
+║  │ ▶ Pradėti Proxy │ ⏹ Sustabdyti     │       ║
+║  │                 │ Proxy            │       ║
+║  └─────────────────┴──────────────────┘       ║
+║                                                ║
+║  Model: [deepseek-pro ▼]                      ║
+║  Cost Today: $0.08                             ║
+║  Requests: 45                                  ║
+║                                                ║
+║  [💻 Launch Claude Code + Gateway]            ║
+║                                                ║
+║  📋 Activity Logs:                             ║
+║  ✅ 45 requests processed                      ║
+║  💰 Total cost: $0.08                          ║
+║                                                ║
+╚════════════════════════════════════════════════╝
 ```
+
+### Cost Savings in Real-Time
+- 🔴 **Without Gateway**: $3.00 per 1M tokens
+- 🟢 **With Gateway**: $0.14 per 1M tokens
+- 💰 **Savings**: **95%** on every request!
 
 ---
 
 ## 🔌 Claude Code Integration
-
-Use your gateway with Claude Code:
 
 ```powershell
 # Set environment
@@ -154,19 +138,21 @@ $env:ANTHROPIC_BASE_URL = "http://127.0.0.1:4000/v1"
 claude code .
 ```
 
-**Result**: All Claude Code operations now use **DeepSeek Pro** (91% cheaper) instead of direct Claude API! 🎉
+**Result**: All Claude Code operations now use **DeepSeek Pro** (91% cheaper)! 🎉
 
 ---
 
-## 📊 Model Comparison
+## 📸 Screenshots & Demo
 
-| Model | Cost/1M | Speed | Quality | Use Case |
-|-------|---------|-------|---------|----------|
-| **deepseek-flash** | $0.014 | ⚡⚡⚡ | ⭐⭐ | Simple tasks, brainstorm |
-| **cheap-code** | $0.050 | ⚡⚡ | ⭐⭐⭐ | Code generation |
-| **claude-haiku** | $0.080 | ⚡⚡⭐ | ⭐⭐⭐ | Real Claude (fast) |
-| **claude-sonnet** | $3.000 | ⚡ | ⭐⭐⭐⭐⭐ | Complex reasoning |
-| **deepseek-pro** | $0.270 | ⚡ | ⭐⭐⭐⭐ | Quality fallback |
+See [Visual Guide](docs/VISUAL_GUIDE.md) for:
+- ✅ Step-by-step screenshot instructions
+- ✅ GIF creation tutorial
+- ✅ ASCII mockups of each feature
+
+### To Capture Your Own:
+1. Run: `python gateway-gui.py`
+2. Press: `Win + Shift + S` (Windows screenshot)
+3. Save to: `docs/images/gateway-gui-main.png`
 
 ---
 
@@ -176,6 +162,7 @@ claude code .
 - **[Models Guide](docs/MODELS.md)** - Complete model comparison
 - **[Usage Guide](docs/USAGE.md)** - Examples (Python, JS, cURL)
 - **[Cloud Roadmap](docs/CLOUD_ROADMAP.md)** - v2.0 SaaS vision
+- **[Visual Guide](docs/VISUAL_GUIDE.md)** - Screenshots & mockups
 - **[Contributing](CONTRIBUTING.md)** - How to contribute
 - **[Changelog](CHANGELOG.md)** - Version history
 
@@ -184,63 +171,17 @@ claude code .
 ## 🛠️ Architecture
 
 ```
-┌──────────────────────────────────────────────┐
-│         Your Application                     │
-│  (Claude Code, Python, Node.js, etc.)        │
-└──────────────────────────────────────────────┘
-              ↓ (ANTHROPIC_BASE_URL)
-┌──────────────────────────────────────────────┐
-│     LiteLLM Gateway (127.0.0.1:4000)         │
-│  • Smart model routing                       │
-│  • Cost tracking                             │
-│  • Failover chain                            │
-│  • Desktop GUI                               │
-└──────────────────────────────────────────────┘
-              ↓
-┌──────────────────────────────────────────────┐
-│         OpenRouter API                       │
-│  (Unified AI Provider Proxy)                 │
-└──────────────────────────────────────────────┘
-              ↓
-┌────────┬────────┬────────┬────────┬────────┐
-│DeepSeek│Kimi    │Claude  │GPT-4   │Others  │
-│(cheap) │(quick) │(power) │(power) │(backup)│
-└────────┴────────┴────────┴────────┴────────┘
+Your Application (Claude Code, Python, etc.)
+         ↓
+LiteLLM Gateway (127.0.0.1:4000)
+  ├─ Smart routing
+  ├─ Cost tracking
+  └─ Failover chain
+         ↓
+OpenRouter API (Unified provider proxy)
+         ↓
+DeepSeek | Kimi | Claude | GPT-4 | Others
 ```
-
----
-
-## 🚀 Production Deployment
-
-### Docker (Coming v1.1)
-```bash
-docker build -t litellm-gateway .
-docker run -p 4000:4000 -e OPENROUTER_API_KEY=xxx litellm-gateway
-```
-
-### Cloud (Roadmap v2.0)
-- AWS ECS, Google Cloud Run, Azure Container Instances
-- Auto-scaling based on load
-- Team management & billing
-- API key rotation
-
----
-
-## 📈 Performance & Reliability
-
-- **Latency**: ~200ms added (negligible)
-- **Uptime**: 99.9% (via OpenRouter)
-- **Failover**: Automatic chain (fast → quality → fallback)
-- **Rate Limits**: Per-model, per-key management
-
----
-
-## 🛡️ Security
-
-- ✅ **Local proxy** - API key never leaves your machine
-- ✅ **Environment variables** - Secrets in `.env`, not in code
-- ✅ **MIT License** - Open source, audit-able
-- ✅ **No data collection** - We don't store your requests
 
 ---
 
@@ -250,16 +191,13 @@ docker run -p 4000:4000 -e OPENROUTER_API_KEY=xxx litellm-gateway
 **A**: Yes! Your OpenRouter key stays on your machine. The gateway is just a local proxy.
 
 ### Q: Can I use this in production?
-**A**: Yes! v1.0 is stable for production. We recommend:
-- Run on a private server
-- Use with your own API key
-- Monitor costs with the dashboard
+**A**: Yes! v1.0 is stable. We recommend running on a private server with your own API key.
 
 ### Q: What if a model fails?
-**A**: Automatic failover! If deepseek-pro times out, it tries claude-haiku, then falls back to deepseek-flash.
+**A**: Automatic failover! If deepseek-pro times out, it tries claude-haiku, then deepseek-flash.
 
 ### Q: How much will I save?
-**A**: Typical developer saves **$200-500/month** if they were using Claude directly.
+**A**: Typical developer saves **$200-500/month** if using Claude directly.
 
 ---
 
@@ -267,18 +205,11 @@ docker run -p 4000:4000 -e OPENROUTER_API_KEY=xxx litellm-gateway
 
 We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md)
 
-Areas we need help:
-- 🐳 Docker containerization
-- 🌐 Web dashboard
-- 📱 Mobile app
-- 🧪 More tests
-- 📖 Documentation improvements
-
 ---
 
 ## 📄 License
 
-MIT License - See [LICENSE](LICENSE) for details
+MIT License - See [LICENSE](LICENSE)
 
 Free for commercial and open-source use!
 
@@ -286,19 +217,11 @@ Free for commercial and open-source use!
 
 ## 🌟 Show Your Support
 
-If this project helped you save money on AI APIs:
+If this project helped you save money:
 - ⭐ **Star us on GitHub**
 - 🐛 **Report bugs**
 - 💡 **Share ideas**
 - 🤝 **Contribute code**
-
----
-
-## 📞 Support
-
-- 💬 [GitHub Issues](https://github.com/osamamama-ai/litellm-gateway/issues)
-- 📧 Email: [Your email if you add it]
-- 💻 [Discussions](https://github.com/osamamama-ai/litellm-gateway/discussions)
 
 ---
 
