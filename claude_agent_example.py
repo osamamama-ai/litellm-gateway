@@ -7,8 +7,8 @@ from litellm_client import LiteLLMClient
 
 # Inicijalizuoti gateway client
 gateway = LiteLLMClient(
-    base_url="http://127.0.0.1:4000/v1",
-    api_key="sk-gateway-demo-key"
+    base_url="http://127.0.0.1:4000/v1"
+    # api_key will be loaded from .env file automatically
 )
 
 
