@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  litellm-db:
+    image: postgres:15
+    container_name: litellm-db
+    environment:
+      POSTGRES_PASSWORD: litellm
+      POSTGRES_DB: litellm
+    ports:
+      - "5432:5432"
+    volumes:
+      - litellm-data:/var/lib/postgresql/data
+    networks:
+      - litellm-network
+
+  gateway:
+    image: python:3.11-slim
+    container_name: litellm-gateway
+    working_dir: /app
+    command: >
+      bash -c "pip install -q 'litellm[proxy]' &&
+               litellm --config config.yaml --port 4000"
+    environment:
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
+      LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY}
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./config.yaml:/app/config.yaml
+    depends_on:
+      - litellm-db
+    networks:
+      - litellm-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  flask:
+    image: python:3.11-slim
+    container_name: flask-api
+    working_dir: /app
+    command: >
+      bash -c "pip install -q flask requests &&
+               python -m flask run --host=0.0.0.0 --port=5000"
+    environment:
+      FLASK_APP: examples/web_api_flask.py
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+    networks:
+      - litellm-network
+
+  fastapi:
+    image: python:3.11-slim
+    container_name: fastapi-service
+    working_dir: /app
+    command: >
+      bash -c "pip install -q fastapi uvicorn requests &&
+               uvicorn examples.web_api_fastapi:app --host=0.0.0.0 --port=8000"
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    networks:
+      - litellm-network
+
+networks:
+  litellm-network:
+    driver: bridge
+
+volumes:
+  litellm-data:
